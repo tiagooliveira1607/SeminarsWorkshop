@@ -1,0 +1,6 @@
+@prefix mwk: <https://w3id.org/mwk/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+<https://w3id.org/mwk/> a owl:Ontology ;
+    dcterms:title "Medical Wikipedia Knowledge (MWK) Vocabulary"@en .
