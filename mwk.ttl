@@ -3,4 +3,4 @@
 @prefix dcterms: <http://purl.org/dc/terms/> .
 
 <https://w3id.org/mwk/> a owl:Ontology ;
-    dcterms:title "Medical Wikipedia Knowledge (MWK) Vocabulary"@en .
+    dcterms:title "MWK Vocabulary"@en .
