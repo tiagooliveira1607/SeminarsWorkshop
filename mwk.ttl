@@ -1,6 +1,373 @@
-@prefix mwk: <https://w3id.org/mwk/> .
-@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix mwk:     <https://w3id.org/mwk/> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix dqv:     <http://www.w3.org/ns/dqv#> .
+@prefix fabio:   <http://purl.org/spar/fabio/> .
 
-<https://w3id.org/mwk/> a owl:Ontology ;
-    dcterms:title "MWK Vocabulary"@en .
+# =====================================================================
+# MWK: vocabulary for the quality assessment of medical Wikipedia articles
+# Namespace: https://w3id.org/mwk/  (prefix mwk:)
+# Contains the terms minted in the vocabulary alignment (Exercise 3).
+# =====================================================================
+
+<https://w3id.org/mwk>
+    a owl:Ontology ;
+    dcterms:title "MWK: vocabulary for the quality assessment of medical Wikipedia articles"@en ;
+    dcterms:description "Terms for describing the WikiProject Medicine top-1,000 Wikipedia articles, their edit activity, their structure and their quality assessment."@en ;
+    owl:versionInfo "0.1" .
+    dcterms:creator "Pedro João"@pt;
+    dcterms:creator "Tiago Oliveira"@pt;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> .
+    # TODO: add dcterms:creator (your names) and dcterms:license before publishing.
+
+# ---------------------------------------------------------------------
+# Classes
+# ---------------------------------------------------------------------
+
+mwk:Article
+    a owl:Class ;
+    rdfs:subClassOf fabio:WikipediaEntry ;
+    rdfs:label "article"@en ;
+    rdfs:comment "Wikipedia article in the WikiProject Medicine top 1000 list."@en .
+
+mwk:EditActivity
+    a owl:Class ;
+    rdfs:label "edit activity"@en ;
+    rdfs:comment "Edit activity statistics of an article."@en .
+
+mwk:ArticleStructure
+    a owl:Class ;
+    rdfs:label "article structure"@en ;
+    rdfs:comment "Structural elements of an article."@en .
+
+# ---------------------------------------------------------------------
+# Object properties
+# ---------------------------------------------------------------------
+
+mwk:hasEditActivity
+    a owl:ObjectProperty ;
+    rdfs:label "has edit activity"@en ;
+    rdfs:comment "Links the article to its edit activity."@en ;
+    rdfs:domain mwk:Article ;
+    rdfs:range mwk:EditActivity .
+
+mwk:hasStructure
+    a owl:ObjectProperty ;
+    rdfs:label "has structure"@en ;
+    rdfs:comment "Links the article to its structure."@en ;
+    rdfs:domain mwk:Article ;
+    rdfs:range mwk:ArticleStructure .
+
+mwk:qualityClass
+    a owl:ObjectProperty ;
+    rdfs:label "quality class"@en ;
+    rdfs:comment "Quality rating according to WikiProject Medicine."@en ;
+    rdfs:domain mwk:Article ;
+    rdfs:range skos:Concept .
+
+mwk:importance
+    a owl:ObjectProperty ;
+    rdfs:label "importance"@en ;
+    rdfs:comment "Importance according to WikiProject Medicine."@en ;
+    rdfs:domain mwk:Article ;
+    rdfs:range skos:Concept .
+
+# ---------------------------------------------------------------------
+# Datatype properties: Article
+# ---------------------------------------------------------------------
+
+mwk:rank
+    a owl:DatatypeProperty ;
+    rdfs:label "rank"@en ;
+    rdfs:comment "Rank position in the top 1000 list."@en ;
+    rdfs:domain mwk:Article ;
+    rdfs:range xsd:positiveInteger .
+
+mwk:articleLength
+    a owl:DatatypeProperty ;
+    rdfs:label "article length"@en ;
+    rdfs:comment "Text size in number of characters."@en ;
+    rdfs:domain mwk:Article ;
+    rdfs:range xsd:nonNegativeInteger .
+
+mwk:age
+    a owl:DatatypeProperty ;
+    rdfs:label "age"@en ;
+    rdfs:comment "Article's age, in days."@en ;
+    rdfs:domain mwk:Article ;
+    rdfs:range xsd:nonNegativeInteger .
+
+mwk:translated
+    a owl:DatatypeProperty ;
+    rdfs:label "translated"@en ;
+    rdfs:comment "Whether the article was translated by the Healthcare Translation Task Force."@en ;
+    rdfs:domain mwk:Article ;
+    rdfs:range xsd:boolean .
+
+mwk:codes
+    a owl:DatatypeProperty ;
+    rdfs:label "codes"@en ;
+    rdfs:comment "Number of medical codes in the article's templates."@en ;
+    rdfs:domain mwk:Article ;
+    rdfs:range xsd:nonNegativeInteger .
+
+# ---------------------------------------------------------------------
+# Datatype properties: EditActivity
+# (the number of unique editors reuses sioc:num_authors)
+# ---------------------------------------------------------------------
+
+mwk:numEdits
+    a owl:DatatypeProperty ;
+    rdfs:label "number of edits"@en ;
+    rdfs:comment "Number of edits made to the article."@en ;
+    rdfs:domain mwk:EditActivity ;
+    rdfs:range xsd:nonNegativeInteger .
+
+mwk:numAnonEdits
+    a owl:DatatypeProperty ;
+    rdfs:label "number of anonymous edits"@en ;
+    rdfs:comment "Number of edits by anonymous editors."@en ;
+    rdfs:domain mwk:EditActivity ;
+    rdfs:range xsd:nonNegativeInteger .
+
+mwk:numRegisteredEdits
+    a owl:DatatypeProperty ;
+    rdfs:label "number of registered edits"@en ;
+    rdfs:comment "Number of edits by registered editors."@en ;
+    rdfs:domain mwk:EditActivity ;
+    rdfs:range xsd:nonNegativeInteger .
+
+mwk:numReverts
+    a owl:DatatypeProperty ;
+    rdfs:label "number of reverts"@en ;
+    rdfs:comment "Number of reverts of earlier edits."@en ;
+    rdfs:domain mwk:EditActivity ;
+    rdfs:range xsd:nonNegativeInteger .
+
+mwk:numWpEdits
+    a owl:DatatypeProperty ;
+    rdfs:label "number of WikiProject Medicine admin edits"@en ;
+    rdfs:comment "Number of edits by WikiProject Medicine admins."@en ;
+    rdfs:domain mwk:EditActivity ;
+    rdfs:range xsd:nonNegativeInteger .
+
+mwk:connectivity
+    a owl:DatatypeProperty ;
+    rdfs:label "connectivity"@en ;
+    rdfs:comment "Number of articles linked to this one through common editors."@en ;
+    rdfs:domain mwk:EditActivity ;
+    rdfs:range xsd:nonNegativeInteger .
+
+mwk:medianRevertTime
+    a owl:DatatypeProperty ;
+    rdfs:label "median revert time"@en ;
+    rdfs:comment "Median time before an edit is reverted. The unit is not stated in the source."@en ;
+    rdfs:domain mwk:EditActivity ;
+    rdfs:range xsd:decimal .
+
+mwk:diversity
+    a owl:DatatypeProperty ;
+    rdfs:label "diversity"@en ;
+    rdfs:comment "Unique editors divided by total edits."@en ;
+    rdfs:domain mwk:EditActivity ;
+    rdfs:range xsd:decimal .
+
+mwk:adminShare
+    a owl:DatatypeProperty ;
+    rdfs:label "admin share"@en ;
+    rdfs:comment "Share of edits made by administrators."@en ;
+    rdfs:domain mwk:EditActivity ;
+    rdfs:range xsd:decimal .
+
+mwk:wpmShare
+    a owl:DatatypeProperty ;
+    rdfs:label "WikiProject Medicine admin share"@en ;
+    rdfs:comment "Share of edits made by WikiProject Medicine admins."@en ;
+    rdfs:domain mwk:EditActivity ;
+    rdfs:range xsd:decimal .
+
+# ---------------------------------------------------------------------
+# Datatype properties: ArticleStructure
+# ---------------------------------------------------------------------
+
+mwk:numInnerLinks
+    a owl:DatatypeProperty ;
+    rdfs:label "number of inner links"@en ;
+    rdfs:comment "Links in the text to other Wikipedia pages."@en ;
+    rdfs:domain mwk:ArticleStructure ;
+    rdfs:range xsd:nonNegativeInteger .
+
+mwk:numExternalLinks
+    a owl:DatatypeProperty ;
+    rdfs:label "number of external links"@en ;
+    rdfs:comment "Links to content outside Wikipedia."@en ;
+    rdfs:domain mwk:ArticleStructure ;
+    rdfs:range xsd:nonNegativeInteger .
+
+mwk:numBrokenLinks
+    a owl:DatatypeProperty ;
+    rdfs:label "number of broken links"@en ;
+    rdfs:comment "Links to pages that are currently unavailable."@en ;
+    rdfs:domain mwk:ArticleStructure ;
+    rdfs:range xsd:nonNegativeInteger .
+
+mwk:repLinks
+    a owl:DatatypeProperty ;
+    rdfs:label "reputable links"@en ;
+    rdfs:comment "Number of links to reputable sources."@en ;
+    rdfs:domain mwk:ArticleStructure ;
+    rdfs:range xsd:nonNegativeInteger .
+
+mwk:numImages
+    a owl:DatatypeProperty ;
+    rdfs:label "number of images"@en ;
+    rdfs:comment "Number of images in the article."@en ;
+    rdfs:domain mwk:ArticleStructure ;
+    rdfs:range xsd:nonNegativeInteger .
+
+mwk:numInfobox
+    a owl:DatatypeProperty ;
+    rdfs:label "number of infoboxes"@en ;
+    rdfs:comment "Number of health-related infoboxes."@en ;
+    rdfs:domain mwk:ArticleStructure ;
+    rdfs:range xsd:nonNegativeInteger .
+
+mwk:infoboxValues
+    a owl:DatatypeProperty ;
+    rdfs:label "infobox values"@en ;
+    rdfs:comment "Number of values in health-related infoboxes."@en ;
+    rdfs:domain mwk:ArticleStructure ;
+    rdfs:range xsd:nonNegativeInteger .
+
+mwk:infoboxImages
+    a owl:DatatypeProperty ;
+    rdfs:label "infobox images"@en ;
+    rdfs:comment "Number of images in health-related infoboxes."@en ;
+    rdfs:domain mwk:ArticleStructure ;
+    rdfs:range xsd:nonNegativeInteger .
+
+mwk:numTemplates
+    a owl:DatatypeProperty ;
+    rdfs:label "number of templates"@en ;
+    rdfs:comment "Number of health-related templates."@en ;
+    rdfs:domain mwk:ArticleStructure ;
+    rdfs:range xsd:nonNegativeInteger .
+
+mwk:numRecSections
+    a owl:DatatypeProperty ;
+    rdfs:label "number of recommended sections"@en ;
+    rdfs:comment "Number of recommended sections."@en ;
+    rdfs:domain mwk:ArticleStructure ;
+    rdfs:range xsd:nonNegativeInteger .
+
+mwk:infoNoise
+    a owl:DatatypeProperty ;
+    rdfs:label "information noise"@en ;
+    rdfs:comment "Information left after stemming and stopword removal, divided by the original size."@en ;
+    rdfs:domain mwk:ArticleStructure ;
+    rdfs:range xsd:decimal .
+
+# ---------------------------------------------------------------------
+# Quality metrics (instances of dqv:Metric)
+# Used with dqv:QualityMeasurement, dqv:isMeasurementOf and dqv:value.
+# ---------------------------------------------------------------------
+
+mwk:Flesch
+    a dqv:Metric ;
+    rdfs:label "Flesch"@en ;
+    rdfs:comment "Flesch reading ease score. Can be negative."@en .
+
+mwk:Kincaid
+    a dqv:Metric ;
+    rdfs:label "Kincaid"@en ;
+    rdfs:comment "Kincaid score."@en .
+
+mwk:Authority
+    a dqv:Metric ;
+    rdfs:label "Authority"@en ;
+    rdfs:comment "Authority computed score."@en .
+
+mwk:Completeness
+    a dqv:Metric ;
+    rdfs:label "Completeness"@en ;
+    rdfs:comment "Completeness computed score."@en .
+
+mwk:Informativeness
+    a dqv:Metric ;
+    rdfs:label "Informativeness"@en ;
+    rdfs:comment "Informativeness computed score."@en .
+
+mwk:Consistency
+    a dqv:Metric ;
+    rdfs:label "Consistency"@en ;
+    rdfs:comment "Consistency computed score."@en .
+
+mwk:Currency
+    a dqv:Metric ;
+    rdfs:label "Currency"@en ;
+    rdfs:comment "Currency computed score."@en .
+
+mwk:Volatility
+    a dqv:Metric ;
+    rdfs:label "Volatility"@en ;
+    rdfs:comment "Volatility computed score."@en .
+
+mwk:Complexity
+    a dqv:Metric ;
+    rdfs:label "Complexity"@en ;
+    rdfs:comment "Complexity computed score."@en .
+
+mwk:HAuthority
+    a dqv:Metric ;
+    rdfs:label "Health authority"@en ;
+    rdfs:comment "HealthAuthority computed score."@en .
+
+mwk:HCompleteness
+    a dqv:Metric ;
+    rdfs:label "Health completeness"@en ;
+    rdfs:comment "HealthCompleteness computed score."@en .
+
+mwk:HInformativeness
+    a dqv:Metric ;
+    rdfs:label "Health informativeness"@en ;
+    rdfs:comment "HealthInformativeness computed score."@en .
+
+mwk:HConsistency
+    a dqv:Metric ;
+    rdfs:label "Health consistency"@en ;
+    rdfs:comment "HealthConsistency computed score."@en .
+
+# ---------------------------------------------------------------------
+# Concept schemes and concepts (SKOS)
+# ---------------------------------------------------------------------
+
+mwk:QualityScale
+    a skos:ConceptScheme ;
+    skos:prefLabel "WikiProject Medicine quality scale for articles"@en .
+
+mwk:ImportanceScale
+    a skos:ConceptScheme ;
+    skos:prefLabel "WikiProject Medicine importance scale"@en .
+
+# Quality concepts. The source value "Unknown" maps to mwk:Unassessed.
+mwk:FA a skos:Concept ; skos:prefLabel "Featured article"@en ;    skos:notation "FA" ;    skos:inScheme mwk:QualityScale .
+mwk:FL a skos:Concept ; skos:prefLabel "Featured list"@en ;       skos:notation "FL" ;    skos:inScheme mwk:QualityScale .
+mwk:A  a skos:Concept ; skos:prefLabel "A-class article"@en ;     skos:notation "A" ;     skos:inScheme mwk:QualityScale .
+mwk:GA a skos:Concept ; skos:prefLabel "Good article"@en ;        skos:notation "GA" ;    skos:inScheme mwk:QualityScale .
+mwk:B  a skos:Concept ; skos:prefLabel "B-class article"@en ;     skos:notation "B" ;     skos:inScheme mwk:QualityScale .
+mwk:C  a skos:Concept ; skos:prefLabel "C-class article"@en ;     skos:notation "C" ;     skos:inScheme mwk:QualityScale .
+mwk:Start a skos:Concept ; skos:prefLabel "Start-class article"@en ; skos:notation "Start" ; skos:inScheme mwk:QualityScale .
+mwk:Stub  a skos:Concept ; skos:prefLabel "Stub-class article"@en ;  skos:notation "Stub" ;  skos:inScheme mwk:QualityScale .
+mwk:List  a skos:Concept ; skos:prefLabel "List-class article"@en ;  skos:notation "List" ;  skos:inScheme mwk:QualityScale .
+mwk:Unassessed a skos:Concept ; skos:prefLabel "Unassessed"@en ; skos:notation "Unassessed" ; skos:inScheme mwk:QualityScale .
+
+# Importance concepts.
+mwk:Top     a skos:Concept ; skos:prefLabel "Top importance"@en ;     skos:notation "Top" ;     skos:inScheme mwk:ImportanceScale .
+mwk:High    a skos:Concept ; skos:prefLabel "High importance"@en ;    skos:notation "High" ;    skos:inScheme mwk:ImportanceScale .
+mwk:Mid     a skos:Concept ; skos:prefLabel "Mid importance"@en ;     skos:notation "Mid" ;     skos:inScheme mwk:ImportanceScale .
+mwk:Low     a skos:Concept ; skos:prefLabel "Low importance"@en ;     skos:notation "Low" ;     skos:inScheme mwk:ImportanceScale .
+mwk:NA      a skos:Concept ; skos:prefLabel "Not an article"@en ;     skos:notation "NA" ;      skos:inScheme mwk:ImportanceScale .
+mwk:Unknown a skos:Concept ; skos:prefLabel "Unknown importance"@en ; skos:notation "Unknown" ; skos:inScheme mwk:ImportanceScale .

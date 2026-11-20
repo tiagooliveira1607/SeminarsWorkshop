@@ -1,0 +1,240 @@
+@prefix sh:      <http://www.w3.org/ns/shacl#> .
+@prefix mwk:     <https://w3id.org/mwk/> .
+@prefix mwksh:   <#> .                      # local names, resolved against this file
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix dctype:  <http://purl.org/dc/dcmitype/> .
+@prefix foaf:    <http://xmlns.com/foaf/0.1/> .
+@prefix sioc:    <http://rdfs.org/sioc/ns#> .
+@prefix dqv:     <http://www.w3.org/ns/dqv#> .
+
+# =====================================================================
+# SHACL shapes for the MWK Linked Data Application Profile.
+# One NodeShape per class in the constraints matrix, one property
+# shape per row. Range -> sh:datatype / sh:class / sh:nodeKind,
+# Card. -> sh:minCount / sh:maxCount, Encoding -> sh:pattern,
+# sh:in, sh:minInclusive / sh:maxInclusive.
+# =====================================================================
+
+# ---------------------------------------------------------------------
+# Dataset
+# ---------------------------------------------------------------------
+mwksh:DatasetShape
+    a sh:NodeShape ;
+    sh:targetClass dctype:Dataset ;
+    sh:property [
+        sh:path dcterms:title ;
+        sh:datatype rdf:langString ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "A dataset needs exactly one title with a language tag." ;
+    ] ;
+    sh:property [
+        sh:path dcterms:creator ;
+        sh:class foaf:Person ;
+        sh:minCount 1 ;
+        sh:message "A dataset needs at least one creator, described as a foaf:Person." ;
+    ] ;
+    sh:property [
+        sh:path dcterms:license ;
+        sh:nodeKind sh:IRI ;
+        sh:pattern "^https?://spdx\\.org/licenses/" ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "A dataset needs exactly one licence, given as an SPDX licence URI." ;
+    ] ;
+    sh:property [
+        sh:path dcterms:created ;
+        sh:datatype xsd:date ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "A dataset needs exactly one creation date (xsd:date, ISO 8601)." ;
+    ] .
+
+# ---------------------------------------------------------------------
+# Person
+# ---------------------------------------------------------------------
+mwksh:PersonShape
+    a sh:NodeShape ;
+    sh:targetClass foaf:Person ;
+    sh:property [
+        sh:path foaf:name ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "A person needs exactly one name." ;
+    ] .
+
+# ---------------------------------------------------------------------
+# Article
+# ---------------------------------------------------------------------
+mwksh:ArticleShape
+    a sh:NodeShape ;
+    sh:targetClass mwk:Article ;
+    sh:property [
+        sh:path dcterms:title ;
+        sh:datatype rdf:langString ;
+        sh:languageIn ( "en" ) ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "An article needs exactly one English title (@en)." ;
+    ] ;
+    sh:property [
+        sh:path dcterms:language ;
+        sh:datatype xsd:language ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "An article needs exactly one language code (BCP 47)." ;
+    ] ;
+    sh:property [
+        sh:path foaf:primaryTopic ;
+        sh:nodeKind sh:IRI ;
+        sh:pattern "^http://www\\.wikidata\\.org/entity/Q[1-9][0-9]*$" ;
+        sh:maxCount 1 ;
+        sh:message "The topic must be a single Wikidata entity IRI (http://www.wikidata.org/entity/Q...)." ;
+    ] ;
+    sh:property [
+        sh:path dcterms:isPartOf ;
+        sh:class dctype:Dataset ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "An article must belong to exactly one dataset." ;
+    ] ;
+    sh:property [
+        sh:path mwk:rank ;
+        sh:datatype xsd:positiveInteger ;
+        sh:minInclusive 1 ; sh:maxInclusive 1000 ;
+        sh:maxCount 1 ;
+        sh:message "The rank is optional and must be a single integer between 1 and 1000." ;
+    ] ;
+    sh:property [
+        sh:path mwk:articleLength ;
+        sh:datatype xsd:nonNegativeInteger ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path mwk:age ;
+        sh:datatype xsd:nonNegativeInteger ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path mwk:translated ;
+        sh:datatype xsd:boolean ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path mwk:codes ;
+        sh:datatype xsd:nonNegativeInteger ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path mwk:hasEditActivity ;
+        sh:class mwk:EditActivity ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "An article needs exactly one edit activity node." ;
+    ] ;
+    sh:property [
+        sh:path mwk:hasStructure ;
+        sh:class mwk:ArticleStructure ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "An article needs exactly one structure node." ;
+    ] ;
+    sh:property [
+        sh:path dqv:hasQualityMeasurement ;
+        sh:class dqv:QualityMeasurement ;
+        sh:message "Quality measurements must be dqv:QualityMeasurement nodes." ;
+    ] ;
+    sh:property [
+        sh:path mwk:qualityClass ;
+        sh:class skos:Concept ;
+        sh:in ( mwk:FA mwk:FL mwk:A mwk:GA mwk:B mwk:C mwk:Start mwk:Stub mwk:List mwk:Unassessed ) ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "An article needs exactly one quality class from mwk:QualityScale." ;
+    ] ;
+    sh:property [
+        sh:path mwk:importance ;
+        sh:class skos:Concept ;
+        sh:in ( mwk:Top mwk:High mwk:Mid mwk:Low mwk:NA mwk:Unknown ) ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "An article needs exactly one importance level from mwk:ImportanceScale." ;
+    ] .
+
+# ---------------------------------------------------------------------
+# EditActivity
+# ---------------------------------------------------------------------
+mwksh:EditActivityShape
+    a sh:NodeShape ;
+    sh:targetClass mwk:EditActivity ;
+    sh:property [ sh:path mwk:numEdits ;           sh:datatype xsd:nonNegativeInteger ; sh:minCount 1 ; sh:maxCount 1 ] ;
+    sh:property [ sh:path sioc:num_authors ;       sh:datatype xsd:nonNegativeInteger ; sh:minCount 1 ; sh:maxCount 1 ] ;
+    sh:property [ sh:path mwk:numAnonEdits ;       sh:datatype xsd:nonNegativeInteger ; sh:minCount 1 ; sh:maxCount 1 ] ;
+    sh:property [ sh:path mwk:numRegisteredEdits ; sh:datatype xsd:nonNegativeInteger ; sh:minCount 1 ; sh:maxCount 1 ] ;
+    sh:property [ sh:path mwk:numReverts ;         sh:datatype xsd:nonNegativeInteger ; sh:minCount 1 ; sh:maxCount 1 ] ;
+    sh:property [ sh:path mwk:numWpEdits ;         sh:datatype xsd:nonNegativeInteger ; sh:minCount 1 ; sh:maxCount 1 ] ;
+    sh:property [ sh:path mwk:connectivity ;       sh:datatype xsd:nonNegativeInteger ; sh:minCount 1 ; sh:maxCount 1 ] ;
+    sh:property [ sh:path mwk:medianRevertTime ;   sh:datatype xsd:decimal ; sh:minCount 1 ; sh:maxCount 1 ] ;
+    sh:property [ sh:path mwk:diversity ;          sh:datatype xsd:decimal ; sh:minInclusive 0 ; sh:maxInclusive 1 ; sh:minCount 1 ; sh:maxCount 1 ;
+                  sh:message "diversity is a ratio between 0 and 1." ] ;
+    sh:property [ sh:path mwk:adminShare ;         sh:datatype xsd:decimal ; sh:minInclusive 0 ; sh:maxInclusive 1 ; sh:minCount 1 ; sh:maxCount 1 ;
+                  sh:message "adminShare is a ratio between 0 and 1." ] ;
+    sh:property [ sh:path mwk:wpmShare ;           sh:datatype xsd:decimal ; sh:minInclusive 0 ; sh:maxInclusive 1 ; sh:minCount 1 ; sh:maxCount 1 ;
+                  sh:message "wpmShare is a ratio between 0 and 1." ] .
+
+# ---------------------------------------------------------------------
+# ArticleStructure
+# ---------------------------------------------------------------------
+mwksh:ArticleStructureShape
+    a sh:NodeShape ;
+    sh:targetClass mwk:ArticleStructure ;
+    sh:property [ sh:path mwk:numInnerLinks ;    sh:datatype xsd:nonNegativeInteger ; sh:minCount 1 ; sh:maxCount 1 ] ;
+    sh:property [ sh:path mwk:numExternalLinks ; sh:datatype xsd:nonNegativeInteger ; sh:minCount 1 ; sh:maxCount 1 ] ;
+    sh:property [ sh:path mwk:numBrokenLinks ;   sh:datatype xsd:nonNegativeInteger ; sh:minCount 1 ; sh:maxCount 1 ] ;
+    sh:property [ sh:path mwk:repLinks ;         sh:datatype xsd:nonNegativeInteger ; sh:minCount 1 ; sh:maxCount 1 ] ;
+    sh:property [ sh:path mwk:numImages ;        sh:datatype xsd:nonNegativeInteger ; sh:minCount 1 ; sh:maxCount 1 ] ;
+    sh:property [ sh:path mwk:numInfobox ;       sh:datatype xsd:nonNegativeInteger ; sh:maxInclusive 2 ; sh:minCount 1 ; sh:maxCount 1 ;
+                  sh:message "numInfobox must be between 0 and 2." ] ;
+    sh:property [ sh:path mwk:infoboxValues ;    sh:datatype xsd:nonNegativeInteger ; sh:minCount 1 ; sh:maxCount 1 ] ;
+    sh:property [ sh:path mwk:infoboxImages ;    sh:datatype xsd:nonNegativeInteger ; sh:minCount 1 ; sh:maxCount 1 ] ;
+    sh:property [ sh:path mwk:numTemplates ;     sh:datatype xsd:nonNegativeInteger ; sh:minCount 1 ; sh:maxCount 1 ] ;
+    sh:property [ sh:path mwk:numRecSections ;   sh:datatype xsd:nonNegativeInteger ; sh:minCount 1 ; sh:maxCount 1 ] ;
+    sh:property [ sh:path mwk:infoNoise ;        sh:datatype xsd:decimal ; sh:minInclusive 0 ; sh:maxInclusive 1 ; sh:minCount 1 ; sh:maxCount 1 ;
+                  sh:message "infoNoise is a ratio between 0 and 1." ] .
+
+# ---------------------------------------------------------------------
+# QualityMeasurement (DQV): one node per metric and article
+# ---------------------------------------------------------------------
+mwksh:QualityMeasurementShape
+    a sh:NodeShape ;
+    sh:targetClass dqv:QualityMeasurement ;
+    sh:property [
+        sh:path dqv:isMeasurementOf ;
+        sh:in ( mwk:Flesch mwk:Kincaid mwk:Authority mwk:Completeness mwk:Informativeness
+                mwk:Consistency mwk:Currency mwk:Volatility mwk:Complexity
+                mwk:HAuthority mwk:HCompleteness mwk:HInformativeness mwk:HConsistency ) ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "A measurement must refer to exactly one of the 13 MWK metrics." ;
+    ] ;
+    sh:property [
+        sh:path dqv:value ;
+        sh:datatype xsd:decimal ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "A measurement needs exactly one decimal value." ;
+    ] .
+
+# ---------------------------------------------------------------------
+# SKOS concepts (quality and importance values)
+# ---------------------------------------------------------------------
+mwksh:ConceptShape
+    a sh:NodeShape ;
+    sh:targetClass skos:Concept ;
+    sh:property [
+        sh:path skos:prefLabel ;
+        sh:datatype rdf:langString ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path skos:notation ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path skos:inScheme ;
+        sh:class skos:ConceptScheme ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "A concept must belong to exactly one concept scheme." ;
+    ] .
