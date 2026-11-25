@@ -15,9 +15,10 @@
     a owl:Ontology ;
     dcterms:title "MWK: vocabulary for the quality assessment of medical Wikipedia articles"@en ;
     dcterms:description "Terms for describing the WikiProject Medicine top-1,000 Wikipedia articles, their edit activity, their structure and their quality assessment."@en ;
+    dcterms:creator "Pedro João", "Tiago Oliveira" ;
+    dcterms:created "2026-12-02"^^xsd:date ; # Colocar data da release
     owl:versionInfo "0.1" ;
-    dcterms:creator "Pedro João" ;
-    dcterms:creator "Tiago Oliveira" ;
+    owl:versionIRI <https://w3id.org/mwk/0.1> ;
     dcterms:license <https://creativecommons.org/licenses/by/4.0/> .
 
 # Classes
