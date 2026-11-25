@@ -7,25 +7,20 @@
 @prefix dqv:     <http://www.w3.org/ns/dqv#> .
 @prefix fabio:   <http://purl.org/spar/fabio/> .
 
-# =====================================================================
 # MWK: vocabulary for the quality assessment of medical Wikipedia articles
 # Namespace: https://w3id.org/mwk/  (prefix mwk:)
-# Contains the terms minted in the vocabulary alignment (Exercise 3).
-# =====================================================================
+# Contains the terms minted in the vocabulary alignment 
 
 <https://w3id.org/mwk>
     a owl:Ontology ;
     dcterms:title "MWK: vocabulary for the quality assessment of medical Wikipedia articles"@en ;
     dcterms:description "Terms for describing the WikiProject Medicine top-1,000 Wikipedia articles, their edit activity, their structure and their quality assessment."@en ;
-    owl:versionInfo "0.1" .
-    dcterms:creator "Pedro João"@pt;
-    dcterms:creator "Tiago Oliveira"@pt;
+    owl:versionInfo "0.1" ;
+    dcterms:creator "Pedro João" ;
+    dcterms:creator "Tiago Oliveira" ;
     dcterms:license <https://creativecommons.org/licenses/by/4.0/> .
-    # TODO: add dcterms:creator (your names) and dcterms:license before publishing.
 
-# ---------------------------------------------------------------------
 # Classes
-# ---------------------------------------------------------------------
 
 mwk:Article
     a owl:Class ;
@@ -43,9 +38,7 @@ mwk:ArticleStructure
     rdfs:label "article structure"@en ;
     rdfs:comment "Structural elements of an article."@en .
 
-# ---------------------------------------------------------------------
 # Object properties
-# ---------------------------------------------------------------------
 
 mwk:hasEditActivity
     a owl:ObjectProperty ;
@@ -75,9 +68,7 @@ mwk:importance
     rdfs:domain mwk:Article ;
     rdfs:range skos:Concept .
 
-# ---------------------------------------------------------------------
 # Datatype properties: Article
-# ---------------------------------------------------------------------
 
 mwk:rank
     a owl:DatatypeProperty ;
@@ -114,10 +105,8 @@ mwk:codes
     rdfs:domain mwk:Article ;
     rdfs:range xsd:nonNegativeInteger .
 
-# ---------------------------------------------------------------------
 # Datatype properties: EditActivity
 # (the number of unique editors reuses sioc:num_authors)
-# ---------------------------------------------------------------------
 
 mwk:numEdits
     a owl:DatatypeProperty ;
@@ -189,9 +178,7 @@ mwk:wpmShare
     rdfs:domain mwk:EditActivity ;
     rdfs:range xsd:decimal .
 
-# ---------------------------------------------------------------------
 # Datatype properties: ArticleStructure
-# ---------------------------------------------------------------------
 
 mwk:numInnerLinks
     a owl:DatatypeProperty ;
@@ -270,10 +257,8 @@ mwk:infoNoise
     rdfs:domain mwk:ArticleStructure ;
     rdfs:range xsd:decimal .
 
-# ---------------------------------------------------------------------
 # Quality metrics (instances of dqv:Metric)
 # Used with dqv:QualityMeasurement, dqv:isMeasurementOf and dqv:value.
-# ---------------------------------------------------------------------
 
 mwk:Flesch
     a dqv:Metric ;
@@ -340,9 +325,7 @@ mwk:HConsistency
     rdfs:label "Health consistency"@en ;
     rdfs:comment "HealthConsistency computed score."@en .
 
-# ---------------------------------------------------------------------
 # Concept schemes and concepts (SKOS)
-# ---------------------------------------------------------------------
 
 mwk:QualityScale
     a skos:ConceptScheme ;

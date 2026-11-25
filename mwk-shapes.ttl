@@ -1,6 +1,6 @@
 @prefix sh:      <http://www.w3.org/ns/shacl#> .
 @prefix mwk:     <https://w3id.org/mwk/> .
-@prefix mwksh:   <#> .                      # local names, resolved against this file
+@prefix mwksh:   <#> .      # local names, resolved against this file
 @prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
 @prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
@@ -10,17 +10,14 @@
 @prefix sioc:    <http://rdfs.org/sioc/ns#> .
 @prefix dqv:     <http://www.w3.org/ns/dqv#> .
 
-# =====================================================================
-# SHACL shapes for the MWK Linked Data Application Profile.
-# One NodeShape per class in the constraints matrix, one property
-# shape per row. Range -> sh:datatype / sh:class / sh:nodeKind,
-# Card. -> sh:minCount / sh:maxCount, Encoding -> sh:pattern,
-# sh:in, sh:minInclusive / sh:maxInclusive.
-# =====================================================================
+# SHACL shapes for the MWK Linked Data Application Profile (LDAP).
+# One NodeShape per class in the constraints matrix and one property shape per row. 
+# Range -> sh:datatype / sh:class / sh:nodeKind,
+# Cardinality -> sh:minCount / sh:maxCount 
+# Encoding -> sh:pattern, sh:in, sh:minInclusive / sh:maxInclusive.
 
-# ---------------------------------------------------------------------
 # Dataset
-# ---------------------------------------------------------------------
+
 mwksh:DatasetShape
     a sh:NodeShape ;
     sh:targetClass dctype:Dataset ;
@@ -50,9 +47,8 @@ mwksh:DatasetShape
         sh:message "A dataset needs exactly one creation date (xsd:date, ISO 8601)." ;
     ] .
 
-# ---------------------------------------------------------------------
 # Person
-# ---------------------------------------------------------------------
+
 mwksh:PersonShape
     a sh:NodeShape ;
     sh:targetClass foaf:Person ;
@@ -63,9 +59,8 @@ mwksh:PersonShape
         sh:message "A person needs exactly one name." ;
     ] .
 
-# ---------------------------------------------------------------------
 # Article
-# ---------------------------------------------------------------------
+
 mwksh:ArticleShape
     a sh:NodeShape ;
     sh:targetClass mwk:Article ;
@@ -154,9 +149,8 @@ mwksh:ArticleShape
         sh:message "An article needs exactly one importance level from mwk:ImportanceScale." ;
     ] .
 
-# ---------------------------------------------------------------------
 # EditActivity
-# ---------------------------------------------------------------------
+
 mwksh:EditActivityShape
     a sh:NodeShape ;
     sh:targetClass mwk:EditActivity ;
@@ -175,9 +169,8 @@ mwksh:EditActivityShape
     sh:property [ sh:path mwk:wpmShare ;           sh:datatype xsd:decimal ; sh:minInclusive 0 ; sh:maxInclusive 1 ; sh:minCount 1 ; sh:maxCount 1 ;
                   sh:message "wpmShare is a ratio between 0 and 1." ] .
 
-# ---------------------------------------------------------------------
 # ArticleStructure
-# ---------------------------------------------------------------------
+
 mwksh:ArticleStructureShape
     a sh:NodeShape ;
     sh:targetClass mwk:ArticleStructure ;
@@ -195,9 +188,8 @@ mwksh:ArticleStructureShape
     sh:property [ sh:path mwk:infoNoise ;        sh:datatype xsd:decimal ; sh:minInclusive 0 ; sh:maxInclusive 1 ; sh:minCount 1 ; sh:maxCount 1 ;
                   sh:message "infoNoise is a ratio between 0 and 1." ] .
 
-# ---------------------------------------------------------------------
 # QualityMeasurement (DQV): one node per metric and article
-# ---------------------------------------------------------------------
+
 mwksh:QualityMeasurementShape
     a sh:NodeShape ;
     sh:targetClass dqv:QualityMeasurement ;
@@ -216,9 +208,8 @@ mwksh:QualityMeasurementShape
         sh:message "A measurement needs exactly one decimal value." ;
     ] .
 
-# ---------------------------------------------------------------------
 # SKOS concepts (quality and importance values)
-# ---------------------------------------------------------------------
+
 mwksh:ConceptShape
     a sh:NodeShape ;
     sh:targetClass skos:Concept ;
